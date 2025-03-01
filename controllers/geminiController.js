@@ -52,7 +52,8 @@ exports.sendMessage = async (req, res) => {
             });
             
             // Generate the response with proper context
-            const result = await chat.sendMessage(message);
+            const enhancedMessage = "Remember: do not share any code in your response, only concepts and guidance. " + message;
+            const result = await chat.sendMessage(enhancedMessage);
             const response = await result.response;
             const text = response.text();
             
