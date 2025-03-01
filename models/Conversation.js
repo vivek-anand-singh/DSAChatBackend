@@ -1,21 +1,5 @@
 const mongoose = require('mongoose');
 
-const MessageSchema = new mongoose.Schema({
-    role: {
-        type: String,
-        enum: ['user', 'assistant'],
-        required: true
-    },
-    content: {
-        type: String,
-        required: true
-    },
-    timestamp: {
-        type: Date,
-        default: Date.now
-    }
-});
-
 const ConversationSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -24,9 +8,19 @@ const ConversationSchema = new mongoose.Schema({
     },
     title: {
         type: String,
-        default: 'New Conversation'
+        required: true
     },
-    messages: [MessageSchema],
+    messages: [{
+        role: {
+            type: String,
+            enum: ['user', 'assistant'],
+            required: true
+        },
+        content: {
+            type: String,
+            required: true
+        }
+    }],
     createdAt: {
         type: Date,
         default: Date.now
@@ -35,12 +29,6 @@ const ConversationSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-});
-
-// Update the updatedAt timestamp on save
-ConversationSchema.pre('save', function (next) {
-    this.updatedAt = Date.now();
-    next();
 });
 
 module.exports = mongoose.model('Conversation', ConversationSchema);
